@@ -1,0 +1,5522 @@
+[
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "150.241.75.158",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "150.241.75.136",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇨🇦 Обход #1 -> Канада | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "144.31.219.22",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "144.31.219.17",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇫🇮 Обход #1 -> Финляндия | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "150.241.75.158",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "150.241.75.136",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇨🇦 Обход #2 -> Канада | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "144.31.219.22",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "144.31.219.17",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇫🇮 Обход #2 -> Финляндия | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "150.241.75.158",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "150.241.75.136",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇨🇦 Обход #3 -> Канада | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "144.31.219.22",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "144.31.219.17",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇫🇮 Обход #3 -> Финляндия | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "144.31.219.22",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "144.31.219.17",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇳🇱 Нидерланды | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "144.31.219.22",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "144.31.219.17",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇫🇮 Финляндия | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "193.151.108.151",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "193.151.108.149",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇩🇪 Германия | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "193.151.108.151",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "193.151.108.149",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇩🇪 Германия GAMING",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "193.23.200.119",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "193.23.200.55",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇳🇴 Норвегия | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "193.23.200.119",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "193.23.200.55",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇪🇪 Эстония | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "144.31.219.22",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "144.31.219.17",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇱🇹 Литва | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "144.31.219.22",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "144.31.219.17",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇧🇪 Бельгия | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "150.241.75.158",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "150.241.75.136",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇱🇻 Латвия | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "193.151.108.151",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "193.151.108.149",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇨🇭 Швейцария | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "193.23.200.119",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "193.23.200.55",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇸🇪 Швеция | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "213.176.73.194",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "213.176.73.105",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇫🇷 Франция | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "150.241.73.162",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "150.241.73.60",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇮🇹 Италия | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "144.31.242.87",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "144.31.242.41",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇩🇰 Дания | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "31.76.7.84",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "144.31.218.165",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇨🇿 Чехия | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "150.241.72.137",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "150.241.72.175",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇦🇹 Австрия | Балансер",
+    "description": "Сброс трафика: без сброса"
+  },
+  {
+    "dns": {
+      "servers": [
+        {
+          "address": "77.88.8.8"
+        },
+        {
+          "address": "77.88.8.1"
+        },
+        {
+          "address": "8.8.4.4"
+        }
+      ],
+      "queryStrategy": "UseIPv4",
+      "enableParallelQuery": true
+    },
+    "routing": {
+      "rules": [
+        {
+          "domain": [
+            "vk-analytics.ru"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "protocol": [
+            "bittorrent"
+          ],
+          "outboundTag": "BLOCK"
+        },
+        {
+          "domain": [
+            "api.browser.yandex.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "proxy"
+        },
+        {
+          "domain": [
+            "yandex.ru",
+            "yandex.net",
+            "yandex.md",
+            "yastatic.net",
+            "kinopoisk.ru",
+            "yandex.com",
+            "my-manager-account.com",
+            "wildberries.ru",
+            "wildberries.eu",
+            "alfabank.ru",
+            "otpbank.ru",
+            "max.ru",
+            "oneme.su",
+            "okcdn.ru",
+            "userapi.com",
+            "vkvideo.ru",
+            "trbcdn.net",
+            "ngenix.net",
+            "mts.ru",
+            "yota.ru",
+            "beeline.ru",
+            "megafon.ru",
+            "2gis.com",
+            "2gis.ru",
+            "vk.ru",
+            "vk.com",
+            "samokat.ru",
+            "nalog.ru",
+            "vkusnoitochka.ru",
+            "qsrapp.ru",
+            "ozon.ru",
+            "rutube.ru",
+            "rostics.ru",
+            "mirconnect.ru",
+            "vtb.ru",
+            "mail.ru",
+            "pin.apiblink.ru",
+            "hexawall.ru"
+          ],
+          "network": "tcp,udp",
+          "outboundTag": "DIRECT"
+        },
+        {
+          "network": "tcp,udp",
+          "balancerTag": "balancer"
+        }
+      ],
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "proxy-",
+            "proxy"
+          ],
+          "strategy": {
+            "type": "leastLoad",
+            "settings": {
+              "costs": [
+                {
+                  "match": "^proxy-2$",
+                  "value": 100,
+                  "regexp": true
+                }
+              ],
+              "expected": 2
+            }
+          },
+          "fallbackTag": "proxy"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "tag": "socks",
+        "port": 10808,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      },
+      {
+        "tag": "http",
+        "port": 10809,
+        "listen": "127.0.0.1",
+        "protocol": "http",
+        "settings": {
+          "udp": true,
+          "auth": "noauth"
+        },
+        "sniffing": {
+          "enabled": true,
+          "routeOnly": false,
+          "destOverride": [
+            "http",
+            "tls",
+            "quic",
+            "fakedns"
+          ]
+        }
+      }
+    ],
+    "outbounds": [
+      {
+        "tag": "proxy",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "170.168.34.197",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "multiMode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "proxy-2",
+        "protocol": "trojan",
+        "settings": {
+          "servers": [
+            {
+              "address": "45.144.175.115",
+              "port": 8080,
+              "password": "0h8qwSxp8JRRYNYef05-8wb3gHNgzPTB"
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "grpc",
+          "grpcSettings": {
+            "serviceName": "streaming",
+            "authority": "",
+            "mode": false
+          },
+          "security": "tls",
+          "tlsSettings": {
+            "serverName": "data-1.1984vpn.ru",
+            "enableSessionResumption": false,
+            "fingerprint": "firefox",
+            "alpn": [
+              "h2",
+              "http/1.1"
+            ]
+          }
+        }
+      },
+      {
+        "tag": "BLOCK",
+        "protocol": "blackhole"
+      },
+      {
+        "tag": "DIRECT",
+        "protocol": "freedom"
+      }
+    ],
+    "burstObservatory": {
+      "pingConfig": {
+        "timeout": "10s",
+        "interval": "1m",
+        "sampling": 5,
+        "httpMethod": "GET",
+        "destination": "https://connectivitycheck.gstatic.com/generate_204",
+        "connectivity": ""
+      },
+      "subjectSelector": [
+        "proxy-",
+        "proxy"
+      ]
+    },
+    "remarks": "🇰🇿 Казахстан | Балансер",
+    "description": "Сброс трафика: без сброса"
+  }
+]
