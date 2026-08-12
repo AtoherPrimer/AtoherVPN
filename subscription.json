@@ -1,5 +1,9 @@
-[
-  {
+{
+  "profile-title": "💧☂️ Atoher VPN",
+  "description": "Сброс трафика: без сброса",
+  "outbounds": [ ... ]
+},
+{
     "dns": {
       "servers": [
         {
